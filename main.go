@@ -13,6 +13,7 @@ func main() {
 		fmt.Println("too many arguments provided")
 		os.Exit(1)
 	}
-	baseUrl := os.Args[1:]
-	fmt.Printf("starting crawl of: %s\n", baseUrl[0])
+	baseUrl := os.Args[1:][0]
+	fmt.Printf("starting crawl of: %s\n", baseUrl)
+	fmt.Println(getHTML(baseUrl))
 }
