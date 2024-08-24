@@ -9,7 +9,10 @@ import (
 
 func getURLsFromHTML(htmlBody, rawBaseURL string) ([]string, error) {
 	var urls []string
-
+	parsedBaseURL, err := url.Parse(rawBaseURL)
+	if err != nil {
+		return urls, fmt.Errorf("could not parse base url")
+	}
 	body := strings.NewReader(htmlBody)
 	htmlNodes, err := html.Parse(body)
 	if err != nil {
@@ -21,17 +24,13 @@ func getURLsFromHTML(htmlBody, rawBaseURL string) ([]string, error) {
 		if node.Type == html.ElementNode && node.Data == "a" {
 			for _, a := range node.Attr {
 				if a.Key == "href" {
-					parsedUrl, err := url.Parse(a.Val)
+					parsedHref, err := url.Parse(a.Val)
 					if err != nil {
 						fmt.Println("could not parse as url")
+						continue
 					}
-					// some incorrect urls can still get through to here, not going to worry about them for now
-					if parsedUrl.Host == "" && parsedUrl.Scheme == "" {
-						urls = append(urls, rawBaseURL+a.Val)
-					} else {
-						urls = append(urls, a.Val)
-					}
-					break
+					resolvedURL := parsedBaseURL.ResolveReference(parsedHref)
+					urls = append(urls, resolvedURL.String())
 				}
 			}
 		}

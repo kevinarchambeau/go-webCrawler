@@ -13,7 +13,7 @@ func getHTML(rawURL string) (string, error) {
 		return "", err
 	}
 	if response.StatusCode >= 400 {
-		return "", fmt.Errorf("request failed, status code: %v", response.StatusCode)
+		return "", fmt.Errorf("status code: %v, url: %v", response.StatusCode, rawURL)
 	}
 	if !strings.Contains(response.Header.Get("Content-Type"), "text/html") {
 		return "", fmt.Errorf("unexpected content type: %v", response.Header.Get("Content-Type"))
