@@ -1,2 +1,2 @@
 # webCrawler
-To run: `go run . "$site"` e.g. `go run . "https://example.com"`
+To run: `go run . "$site" $concurrency $maxPages` e.g. `go run . "https://example.com" 2 50`
