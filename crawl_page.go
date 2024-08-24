@@ -17,7 +17,7 @@ func (cfg *config) crawlPage(rawCurrentURL string) {
 		return
 	}
 
-	fmt.Printf("crawling %v\n", rawCurrentURL)
+	//fmt.Printf("crawling %v\n", rawCurrentURL)
 	currentURL, err := normalizeURL(rawCurrentURL)
 	if err != nil {
 		return
@@ -64,7 +64,7 @@ func (cfg *config) addPageVisit(normalizedURL string) (isFirst bool) {
 func (cfg *config) checkMax() bool {
 	cfg.mu.Lock()
 	defer cfg.mu.Unlock()
-	if len(cfg.pages) >= cfg.maxPages {
+	if len(cfg.pages) > cfg.maxPages-1 {
 		return true
 	}
 
