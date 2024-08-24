@@ -13,6 +13,11 @@ func (cfg *config) crawlPage(rawCurrentURL string) {
 		cfg.wg.Done()
 	}()
 
+	if cfg.checkMax() {
+		return
+	}
+
+	fmt.Printf("crawling %v\n", rawCurrentURL)
 	currentURL, err := normalizeURL(rawCurrentURL)
 	if err != nil {
 		return
@@ -54,4 +59,14 @@ func (cfg *config) addPageVisit(normalizedURL string) (isFirst bool) {
 		cfg.pages[normalizedURL] = 1
 	}
 	return true
+}
+
+func (cfg *config) checkMax() bool {
+	cfg.mu.Lock()
+	defer cfg.mu.Unlock()
+	if len(cfg.pages) >= cfg.maxPages {
+		return true
+	}
+
+	return false
 }
