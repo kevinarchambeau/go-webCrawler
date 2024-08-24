@@ -9,6 +9,10 @@ func normalizeURL(unparsedURL string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	if parsedUrl.Path == "" {
+		return parsedUrl.Host, nil
+	}
 	if parsedUrl.Path[len(parsedUrl.Path)-1:] == "/" {
 		return parsedUrl.Host + parsedUrl.Path[0:len(parsedUrl.Path)-1], nil
 	}

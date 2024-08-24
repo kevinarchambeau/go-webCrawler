@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 )
 
 func getHTML(rawURL string) (string, error) {
@@ -14,7 +15,7 @@ func getHTML(rawURL string) (string, error) {
 	if response.StatusCode >= 400 {
 		return "", fmt.Errorf("request failed, status code: %v", response.StatusCode)
 	}
-	if response.Header.Get("Content-Type") != "text/html" {
+	if !strings.Contains(response.Header.Get("Content-Type"), "text/html") {
 		return "", fmt.Errorf("unexpected content type: %v", response.Header.Get("Content-Type"))
 	}
 	body, err := io.ReadAll(response.Body)
